@@ -56,8 +56,12 @@
         - [ ] string_view
 
 - [ ] 内存
-    - [ ] new和malloc的区别？new内部做了什么事情？（operator new + placement new/构造函数 + static_cast）
+    - [ ] new和malloc的区别？new内部做了什么事情？（operator new + placement new/构造函数 + static_cast, operator new内部调用 malloc）
     - [ ] placement new
+    - [ ] sizeof 空的 struct的大小是多少? (C++ 要求每个对象必须有唯一的内存地址。如果空结构体大小为 0，则同一类型的多个对象将共享相同的内存地址)
+    - [ ] 什么是内存对齐?
+    - [ ] new 失败后, 是抛出异常, 还是返回空指针? (默认new 失败时抛出 std::bad_alloc)
+    - [ ] operator new 内部默认怎么实现的? (malloc / new handler/ throw)
 
 - [ ] STL
     - [ ] vector

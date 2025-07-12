@@ -82,7 +82,12 @@
     - [ ] 特化（特化为模板指定一个具体的类型或值）
     - [ ] 偏特化（偏特化为模板的部分参数提供具体实现，但仍然保留其他参数的泛型性）
         - [ ] 指针偏特化/引用偏特化/容器偏特化/智能指针偏特化/条件偏特化（enable_if）/递归偏特化
-    - [ ] 类型萃取
+    - [ ] 类型萃取 (is_integral_v / remove_reference_t / is_base_of_t / true_type)
+    - [ ] 类型萃取 和 约束 的区别 ()
+    - [ ] enable_if_t 和 if constexpr 的区别
+    - [ ] 模板特化, 对比 if constexpr + 类型萃取/约束 (少量差异使用 if constexpr, 复杂条件使用特化)
+    - [ ] SFINAE+类型 萃取, 对比 concepts (语法简洁, 编译报错清晰)
+    - [ ] 帮我理清 if constexpr / enable_if_t / 类型萃取 / 约束
 
 - [ ] 网络编程
     - [ ] 网络IO模型：阻塞/非阻塞

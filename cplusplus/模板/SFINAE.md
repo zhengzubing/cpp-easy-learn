@@ -20,13 +20,6 @@ SFINAE 是 C++ 模板编程的核心机制，用于在**模板参数推导阶段
 3. **优先级**  
    编译器优先尝试最特化的模板，失败后再尝试较通用的模板。
 
-
-### **二、SFINAE 生效范围**
-SFINAE 仅在以下场景生效：
-1. **函数模板的参数列表**（包括默认参数）
-2. **函数模板的返回值类型**
-3. **类模板的模板参数列表**（包括偏特化）
-
 #### **不生效的场景示例**
 ```cpp
 template<typename T>
@@ -58,31 +51,11 @@ f(42);            // 匹配模板1（模板2推导失败被忽略）
 f(HasInner{});    // 匹配模板2（HasInner有inner_type）
 ```
 
-
-### **四、默认参数 `= nullptr` 的作用**
 在函数模板中，`typename T::inner_type* = nullptr` 的写法是 SFINAE 的常见技巧，核心目的是：
 1. **触发 SFINAE**：当 `T` 没有 `inner_type` 时，参数类型无效，模板被排除。
 2. **简化调用语法**：通过默认参数 `nullptr`，调用时无需显式传递第二个参数。
 
-#### **场景对比**
-```cpp
-// 无默认参数：调用时必须显式传递nullptr
-template<typename T>
-void f(T, typename T::inner_type*);  // 仅当T有inner_type时有效
-
-f(HasInner{}, nullptr);  // 合法
-f(42, nullptr);          // 错误：int没有inner_type
-
-// 有默认参数：调用时可省略第二个参数
-template<typename T>
-void f(T, typename T::inner_type* = nullptr);  // 自动触发SFINAE
-
-f(HasInner{});  // 合法：等价于f(HasInner{}, nullptr)
-f(42);          // 错误：模板被SFINAE排除
-```
-
-
-### **五、关键技术细节**
+### **四、关键技术细节**
 
 #### **1. 替换失败的常见原因**
 - **访问不存在的类型成员**：如 `T::inner_type`（当 `T` 没有该成员时）。
@@ -104,17 +77,12 @@ struct HasSerialize<T, void_t<decltype(std::declval<T>().serialize())>>
     : std::true_type {};
 ```
 
-
-### **六、注意事项**
-1. **SFINAE 仅适用于模板**  
-   普通函数不参与 SFINAE 规则。
-
-2. **错误信息调试**  
-   当多个模板推导失败时，编译器可能报错“no matching function”，需逐一检查每个候选模板的约束条件。
-
-3. **避免过度使用**  
-   复杂的 SFINAE 逻辑会降低代码可读性，优先考虑使用 Concepts（若项目支持）。
+功能：无论传入什么类型参数 Ts...，void_t<Ts...> 始终解析为 void。
+关键技巧：若 Ts... 中存在无效类型（如不存在的成员、不匹配的函数调用），模板实例化会失败，触发 SFINAE。
+void_t 只关心类型是否有效，不执行实际代码（如函数调用）。
+使用 std::declval 生成类型的临时引用，避免构造对象。
 
 
 ### **总结**
-SFINAE 是 C++ 模板编程的基石，通过在模板参数推导阶段排除无效模板，实现类型安全的重载选择。`= nullptr` 技巧则是在保持调用语法简洁的同时应用 SFINAE 的经典实践。
+SFINAE 是 C++ 模板编程的基石，通过在模板参数推导阶段排除无效模板，实现类型安全的重载选择。
+复杂的 SFINAE 逻辑会降低代码可读性，优先考虑使用 Concepts（若项目支持）。

@@ -27,6 +27,17 @@ struct IsPointer : std::false_type {};
 template<typename T>
 struct IsPointer<T*> : std::true_type {};  // 指针特化版本
 
+template<typename T>
+struct is_integral : std::false_type {};
+
+// 为各种整数类型提供特化版本，继承自true_type（即value为true）
+template<> struct is_integral<int> : std::true_type {};
+
+// 模板变量别名：
+// 定义于 <type_traits> 头文件
+template<typename T>
+inline constexpr bool is_integral_v = is_integral<T>::value;
+
 // 使用示例
 static_assert(IsPointer<int*>::value);      // 编译通过
 static_assert(!IsPointer<int>::value);     // 编译通过

@@ -1,3 +1,5 @@
-1. yuv处理库: libyuv
-2.json库:
-3. jepg库:
+- yuv处理库: libyuv
+- yuv查看: www.latelee.org YUVPlayer
+- json库:
+- jepg库:libopencv_imgcodecs
+
